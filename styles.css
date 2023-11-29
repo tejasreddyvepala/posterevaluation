@@ -1,0 +1,287 @@
+/* General styling */
+html, body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1000; /* Ensures the header stays on top of other content */
+}
+
+#companyLogo {
+    height: 80px;
+    width: 80px; /* Make width equal to height for a perfect circle */
+    border-radius: 50%; /* Makes the logo round */
+    margin: 0 15px;
+    cursor: pointer;
+    flex: none; /* Changed from 'left' to 'none' for proper flexbox property */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds a subtle shadow */
+    transition: transform 0.3s ease; /* Smooth transition for animations */
+    overflow: hidden; /* Ensures nothing spills out of the circular boundary */
+}
+
+/* Hover effect - scaling */
+#companyLogo:hover {
+    transform: scale(1.1); /* Scales up the logo on hover */
+}
+
+/* Continuous rotation animation */
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Apply rotation animation */
+#companyLogo {
+    animation: rotate 20s linear infinite; /* Adjust timing as needed */
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    color: #333;
+    background-size: cover;
+    background-position: center center;
+    overflow: hidden;
+}
+
+/* Center the container horizontally and vertically */
+.container {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.9);
+    text-align: center;
+    position: fixed;
+    /* Center the container using flexbox */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Align children vertically in the center */
+    align-items: center; /* Align children horizontally in the center */
+    
+    /* Set a minimum height to vertically center smaller content */
+    min-height: 100vh; /* 100% of the viewport height */
+}
+
+
+h1 {
+    color: black;
+    font-size: 70px;
+}
+
+/* Input and buttons styling */
+input[type=file], input[type=submit] {
+    padding: 10px 20px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+input[type=file] {
+    background-color: #3498db;
+    color: white;
+}
+
+input[type=submit] {
+    background-color: #2c3e50;
+    color: white;
+}
+
+input[type=submit]:hover {
+    background-color: #34495e;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+    margin: 20px auto;
+    display: none;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#previewImg {
+     width : 30%;
+     height: 30%;
+}
+/* Navbar styling */
+/* Base styles for the navbar to cover full width */
+.navbar {
+    width: 100%;
+    height: 80px;
+    background: linear-gradient(to right, #6e48aa, #9d50bb); /* Gradient background */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+    transform: translateY(0);
+    padding: 0 20px; /* Retaining padding for content inside the navbar */
+}
+
+/* Subtle animation to make the navbar pop down when the page loads */
+@keyframes slideDown {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+.navbar {
+    animation: slideDown 0.5s ease forwards;
+}
+
+/* Interactive elements: links that change color and animate */
+.navbar a {
+    color: #ffffff;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden; /* Ensures after pseudo-elements stay within the link boundaries */
+}
+
+/* Hover animation for links */
+.navbar a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #fff;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+}
+
+/* Hover effect for links */
+.navbar a:hover::after, .navbar a:focus::after {
+    transform: translateX(0);
+}
+
+/* Hover effect to change text color and scale */
+.navbar a:hover, .navbar a:focus {
+    color: #9d50bb;
+    transform: scale(1.1);
+}
+
+/* Responsive navbar items for smaller screens */
+@media screen and (max-width: 600px) {
+    .navbar a {
+        padding: 10px;
+        font-size: 15px;
+    }
+}
+
+/* Clear floats */
+.navbar::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.navbar:hover {
+    height: 120px; /* Height increases to 120px on hover */
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropbtn {
+    /* Style your dropdown button */
+    background-color: #4CAF50;
+    color: white;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+}
+
+/* Dropdown Content, hidden by default */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Optionally: change the style of the dropdown button when hovering */
+.dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+}
+
+.div {
+    width: 300px; /* Adjust as needed */
+    text-align: center;
+}
+
+#title {
+    margin-bottom: 20px; /* Adjust space below the title */
+}
+
+#fileInput, #uploadForm input[type="submit"] {
+    display: block;
+    margin: 10px auto; /* Center and space out form elements */
+}
+
+#previewImg {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-top: 20px; /* Space above the image preview */
+}
+
+
+
+
+
+
+
