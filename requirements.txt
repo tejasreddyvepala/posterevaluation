@@ -17,7 +17,7 @@ Flask==2.2.5
 fsspec==2023.1.0
 fuzzywuzzy==0.18.0
 h11==0.14.0
-httpcore==1.0.2
+httpcore==0.17.3
 httpx==0.25.2
 huggingface-hub==0.19.4
 idna==3.6
