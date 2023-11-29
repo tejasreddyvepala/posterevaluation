@@ -103,7 +103,7 @@ spacy-loggers==1.0.5
 spellchecker==0.4
 srsly==2.4.8
 sympy==1.12
-tensorboard==2.15.1
+tensorboard==2.14.0
 tensorboard-data-server==0.7.2
 tensorflow==2.15.0
 tensorflow-estimator==2.15.0
