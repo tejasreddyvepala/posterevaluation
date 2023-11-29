@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Analysis</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body class="container">
+    <header>
+        
+    
+    
+    <div class="navbar">
+
+        <a href="http://127.0.0.1:5000" target="_blank">Home</a>
+        <a href="{{ url_for('about') }}">About</a>
+        <a href="https://github.com/likithabaddam/SE_POSTEREVALUATION" target="_blank">GitHub</a>
+        <a href="#help">Help</a>
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Company Logo" id="companyLogo">
+    </div>   
+    </header> 
+    
+    
+    
+    <div style="position: fixed;" class="div">
+        <h1 id="title">POSTER EVALUATION</h1>
+        <form id="uploadForm" action="/" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" id="fileInput" onchange="previewFile()">
+            <br>
+            <input type="submit" value="Upload and Analyze">
+            <div id="loadingSpinner" class="loading-spinner"></div>
+        </form>
+        <img id="previewImg" src="#" alt="Image preview..." style="display:none; max-width: 100%; height: auto;"/>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#uploadForm').submit(function () {
+                $('#loadingSpinner').show();
+            });
+        });
+
+        // JavaScript function to preview the image
+        function previewFile() {
+            var preview = document.getElementById('previewImg');
+            var file    = document.getElementById('fileInput').files[0];
+            var reader  = new FileReader();
+
+            reader.onloadend = function () {
+                preview.src = reader.result;
+                preview.style.display = 'block';
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = "";
+                preview.style.display = 'none';
+            }
+        }
+        
+    </script>
+</body>
+</html>

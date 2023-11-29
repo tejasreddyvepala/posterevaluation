@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Results</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {packages: ['corechart', 'bar']});
+        google.charts.setOnLoadCallback(drawBasic);
+    
+        function drawBasic() {
+            var data = google.visualization.arrayToDataTable([
+                ['Property', 'Value',],
+                ['Hue', {{ hue_avg }}],
+                ['Saturation', {{ saturation_avg }}],
+                ['Contrast', {{ contrast }}],
+            ]);
+    
+            var options = {
+                title: 'Image Properties',
+                hAxis: {
+                    title: 'Property',
+                },
+                vAxis: {
+                    title: 'Value'
+                }
+            };
+    
+            var chart = new google.visualization.ColumnChart(
+                document.getElementById('chart_div')
+            );
+    
+            chart.draw(data, options);
+        }
+
+        google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawPieChart);
+
+    function drawPieChart() {
+        var data = google.visualization.arrayToDataTable([
+            ['Property', 'Value'],
+            ['Hue', {{ hue_avg }}],
+            ['Saturation', {{ saturation_avg }}],
+            ['Contrast', {{ contrast }}],
+        ]);
+
+        var options = {
+            title: 'Image Properties',
+            is3D: true, // Make it a 3D pie chart for better interactivity
+        };
+
+        var chart = new google.visualization.PieChart(
+            document.getElementById('pie_chart_div')
+        );
+
+        chart.draw(data, options);
+    }
+
+    </script>
+    
+</head>
+<body style="background-color: cornsilk;">
+    <div class="card" id="generatePDF">
+    <div style="width: 800px; height: 300px;">
+    <h3>{{summary}}</h3>
+    </div>
+
+
+    
+    <button id="toggleImageProperties" onclick="toggleVisibility('imageProperties')"><h2>Image Analysis Results</h2></button>
+    <div id="imageProperties">
+    <h3>Image Properties</h3>
+    <table style="width:50%;">
+        <tbody>
+            <tr>
+            <td style="background-color: lightblue;">Hue:</td>
+            <td> {{ hue_avg }}</td></tr>
+            <tr>
+            <td style="background-color: lightblue;">Saturation:</td>
+            <td> {{ saturation_avg }}</td></tr>
+            <tr>
+            <td style="background-color: lightblue;">Contrast:</td>
+            <td> {{ contrast }}</td></tr>
+            <tr>
+            <td style="background-color: lightblue;">Detected Font:</td>
+            <td> {{ detected_font }} </td></tr>
+        </tbody>
+    </table>
+    </div>
+    <h3>Image Properties Visualizations</h3>
+    
+    <div style="display: flex; justify-content: space-between;">
+        <div id="chart_div" style="width: 38%; height: 500px ;"></div>
+        <div id="pie_chart_div" style="width: 58%; height: 600px;"></div>
+    </div>
+    <button id="toggleImageProperties" onclick="toggleVisibility('charts_visualization')"><h2>Charts</h2></button>
+    <div id="charts_visualization">
+    <h3>Number of Charts Extracted</h3>
+    <p>We found {{ chart_count }} charts in the uploaded image.</p>
+
+    <h3>Extracted images from Poster</h3>
+    <div class="charts-container">
+        {% for chart_data in chart_images %}
+        <img src="data:image/png;base64,{{ chart_data }}" alt="Chart">
+        {% endfor %}
+    </div>
+    </div>
+    <h3>Spellcheck and Grammar Errors</h3>
+    <ul>
+        {% for word in misspelled %}
+        <li>Mispelled: {{ word }}</li>
+        {% endfor %}
+        
+<h3>Errors and Suggestions</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Line</th>
+            <th>Column</th>
+            <th>Error</th>
+            <th>Suggestions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for error in error_details %}
+        <tr>
+            <td>{{ error.from_line }}</td>
+            <td>{{ error.from_column }}</td>
+            <td>{{ error.message }}</td>
+            <td>{{ error.replacements }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+    </ul>
+
+    <button id="toggleFontSizes" onclick="toggleVisibility('fontSizes')">Toggle Font Sizes and Text Blocks</button>
+        <div id="fontSizes">
+            <h3>Font Sizes and Text Blocks</h3>
+            <!-- Your existing Font Sizes and Text Blocks table here -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>Text Block</th>
+                        <th>Font Size</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for text_block in grouped_text %}
+                    <tr>
+                        <td>{{ text_block.text }}</td>
+                        <td>{{ text_block.font_size }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    <div>
+        <h1>SUMMARY</h1>
+        <h2>poster is {{category}} </h2>
+        <h3>Reference Verification Results</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Reference</th>
+                <th>Verification Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ref, status in references %}
+            <tr>
+                <td><a href="{{ ref }}" target="_blank">{{ ref }}</a></td>
+                <td>{{ status }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    </div>
+    <button style="background-color: #ffffff; 
+    color: #007bff; 
+    padding: 10px 20px; 
+    border: 1px solid #007bff; 
+    border-radius: 4px; 
+    font-size: 16px; 
+    cursor: pointer; 
+    outline: none; 
+    box-shadow: none; 
+    transition: all 0.3s ease; " id="pdfButton"><b>Click here to Generate PDF</b></button>
+
+    
+
+    </div>
+
+
+
+
+    <script>
+        var button = document.getElementById("pdfButton");
+        var makepdf = document.getElementById("generatePDF");
+        button.addEventListener("click", function () {
+           var mywindow = window.open("", "PRINT", "height=600,width=600");
+           mywindow.document.write(makepdf.innerHTML);
+           mywindow.document.close();
+           mywindow.focus();
+           mywindow.print();
+           return true;
+        });
+
+        // Get the container for found images
+        var foundImageContainer = document.querySelector('.found-image-container');
+
+        // Loop through the image data URLs and create <img> elements
+        image_data_urls.forEach(function(dataUrl) {
+            var imgElement = document.createElement('img');
+            imgElement.src = dataUrl;  // Set the data URL as the image source
+            imgElement.alt = 'Found Image';  // Set alt text for accessibility
+            foundImageContainer.appendChild(imgElement);  // Append the <img> element to the container
+        });
+        
+
+     </script>
+
+<script>
+    // JavaScript function to toggle visibility of elements
+    function toggleVisibility(elementId) {
+        var element = document.getElementById(elementId);
+        if (element.style.display === 'none') {
+            element.style.display = 'block';
+        } else {
+            element.style.display = 'none';
+        }
+    }
+</script>
+
+<button ><a href="http://127.0.0.1:5000" target="_blank">Home</a></button>
+
+</body>
+</html>
