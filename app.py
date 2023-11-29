@@ -5,7 +5,6 @@ import re
 import requests
 import numpy as np
 import pytesseract
-from spellchecker import SpellChecker
 import language_tool_python
 from PIL import ImageFont, ImageDraw, Image
 import werkzeug.utils
@@ -221,7 +220,6 @@ def closest_font(text_from_image):
     return best_match
 
 tool = language_tool_python.LanguageTool('en-US')
-spell = SpellChecker()
 educational_keywords = [ "education", "learn", "teach", "knowledge", "school", "class", "lesson", "study", "student", "teacher", "curriculum", "academic", "training", "tutor", "instructor", "lecture", "course", "university", "college", "library", "textbook", "e-learning", "online learning", "study materials", "research", "homework", "assignment", "exam", "degree", "certificate", "diploma", "graduation", "scholarship", "academic institution", "pedagogy", "educational program", "academic achievement", "educational technology", "learning environment", "educational resources", "teaching method", "academic discipline", "academic department", "schooling", "educational system", "syllabus", "classroom", "study group", "educational materials", "learning objectives", "educational goals", "educational assessment", "educational psychology", "educational theory", "educational research", "educational development", "educational practice", "educational innovation", "educational philosophy", "academic literature", "educational workshop", "educational conference", "educational seminar", "educational event", "educational resource center", "educational project", "educational initiative", "educational funding", "educational grant", "educational association", "educational research institute", "educational consultant","educational approach","teaching philosophy","teaching strategy","learning strategy", ]
 
 def categorize_image_content(img):
@@ -284,7 +282,6 @@ def index():
                 error_details.append(error_detail)
 
             words = re.findall(r'\b\w+\b', text_from_image.lower())
-            misspelled = [word for word in words if spell.unknown([word])]
             images_found = find_charts(img)
             chart_images = find_charts(img)
 
@@ -338,8 +335,7 @@ def index():
                 hue_avg=hue_avg, 
                 saturation_avg=saturation_avg, 
                 contrast=contrast,
-                file_type=file.content_type, 
-                misspelled=misspelled, 
+                file_type=file.content_type,
                 grammar_errors=matches, 
                 detected_font=detected_font, 
                 references=verified_references,
