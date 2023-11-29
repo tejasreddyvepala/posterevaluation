@@ -14,7 +14,7 @@ en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_
 exceptiongroup==1.2.0
 filelock==3.12.2
 Flask==2.2.5
-fsspec==2023.10.0
+fsspec==2023.1.0
 fuzzywuzzy==0.18.0
 h11==0.14.0
 httpcore==1.0.2
